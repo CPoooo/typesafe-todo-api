@@ -18,5 +18,9 @@ export const todosTable = pgTable('todos', {
 })
 
 
-// need to get this down better
-export type 
+// need to get this down better (do i need a deleteUser type too?) do i have to type everything myself?
+export type InsertUser = typeof usersTable.$inferInsert
+export type SelectUser = typeof usersTable.$inferInsert
+
+export type InsertTodo = typeof todosTable.$inferInsert
+export type SelectTodo = typeof todosTable.$inferInsert
