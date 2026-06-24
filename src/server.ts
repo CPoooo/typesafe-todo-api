@@ -3,6 +3,7 @@ import z from 'zod'
 import bcrypt from "bcrypt"
 import { db } from './db/db';
 import { InsertUser, usersTable } from './db/schema';
+import jsonwebtoken from 'jsonwebtoken'
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -71,10 +72,10 @@ app.post('/auth/register', (req, res) => {
     // can move this query into src/queries later. would probably also have a handlers and routes dir as well
     // {email: string, password: string}
     // check if we already have this email -> what code to reject with?
-    const { email, password } = req.body
+    const { email, password, name } = req.body
 
     try {
-        const result = await db.select({
+        let result = await db.select({
             email: usersTable.email
         }).from(usersTable)
 
@@ -86,9 +87,10 @@ app.post('/auth/register', (req, res) => {
         }
 
         const password_hash = await bcrypt.hash(password, 10)
-        const new_user = {email, password_hash}
+        const new_user = await db.insert(usersTable).values({ email, name, password: password_hash }).returning()
+        // now take new user and return them a jwt
+        const user = { userId: new_user[0].id };
 
-        await db.insert(usersTable).values(new_user)
     } catch (error) {
         console.log("Something went wrong querying the db for user by email")
         // should make a discriminated union for all http errors and some custom
