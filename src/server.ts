@@ -2,6 +2,7 @@ import express from 'express';
 import z from 'zod'
 import bcrypt from "bcrypt"
 import { db } from './db/db';
+import { InsertUser, usersTable } from './db/schema';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -51,7 +52,8 @@ type LoginResponse = { status: StatusCode } // some enum or something. this coul
 // force emails and see what emails are or are not registered
 
 // POST   /auth/login          returns a JWT
-app.post('/auth/login', (req: Request<Params, ResBody>, res: Response) => {
+// can fully type the Request with ts and zod after working
+app.post('/auth/login', (req: , res: Response) => {
     // login, check with db and 
     // logic then return jwt. go look into more depth on jwt btw
     // something about rotating them or something <- custom solution before libary for now
@@ -66,6 +68,32 @@ app.post('/auth/login', (req: Request<Params, ResBody>, res: Response) => {
 app.post('/auth/register', (req, res) => {
     // make account and give jwt
     // only if the user does not exist already
+    // can move this query into src/queries later. would probably also have a handlers and routes dir as well
+    // {email: string, password: string}
+    // check if we already have this email -> what code to reject with?
+    const { email, password } = req.body
+
+    try {
+        const result = await db.select({
+            email: usersTable.email
+        }).from(usersTable)
+
+        if (result.length > 0) {
+            // user with this email exists, normally best practice here when registering
+            // is to force the user to verify this email exists. and do verification that way.
+            // for learning purposes I will just return email already exists for now -> which leads to account enumeration (BAD)
+            res.send(JSON.stringify({ error: 'email already exists so go brute force it and take their lunch money' })).status(400)
+        }
+
+        const password_hash = await bcrypt.hash(password, 10)
+        const new_user = {email, password_hash}
+
+        await db.insert(usersTable).values(new_user)
+    } catch (error) {
+        console.log("Something went wrong querying the db for user by email")
+        // should make a discriminated union for all http errors and some custom
+        res.send(JSON.stringify({ error: "Internal Server Error" })).status(500)
+    }
 })
 
 // POST   /auth/logout         invalidate token
