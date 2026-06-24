@@ -2,6 +2,7 @@ import express from 'express';
 import z from 'zod'
 import bcrypt from "bcrypt"
 import { db } from './db/db';
+import { eq } from 'drizzle-orm'; // when we (me) make the src/queries dir we can remove all this
 import { InsertUser, usersTable } from './db/schema';
 import jsonwebtoken from 'jsonwebtoken'
 
@@ -75,15 +76,13 @@ app.post('/auth/register', (req, res) => {
     const { email, password, name } = req.body
 
     try {
-        let result = await db.select({
-            email: usersTable.email
-        }).from(usersTable)
+        const result = await db.selectDistinct().from(usersTable).where(eq(usersTable.email, email  ))
 
         if (result.length > 0) {
             // user with this email exists, normally best practice here when registering
             // is to force the user to verify this email exists. and do verification that way.
             // for learning purposes I will just return email already exists for now -> which leads to account enumeration (BAD)
-            res.send(JSON.stringify({ error: 'email already exists so go brute force it and take their lunch money' })).status(400)
+            res.status(400).send(JSON.stringify({ error: 'email already exists so go brute force it and take their lunch money' }))
         }
 
         const password_hash = await bcrypt.hash(password, 10)
@@ -91,10 +90,14 @@ app.post('/auth/register', (req, res) => {
         // now take new user and return them a jwt
         const user = { userId: new_user[0].id };
 
+        const token = jsonwebtoken.sign(user, process.env.SECRET_KEY!) // find a good way to error earlier in this file with this doesnt exist
+        // maybe some zod on the .env like I saw the Syntax guy do (for now we assert dominance, I mean assert not null)
+
+        res.status(201).send(JSON.stringify(token))
     } catch (error) {
         console.log("Something went wrong querying the db for user by email")
         // should make a discriminated union for all http errors and some custom
-        res.send(JSON.stringify({ error: "Internal Server Error" })).status(500)
+        res.status(500).send(JSON.stringify({ error: "Internal Server Error" }))
     }
 })
 
