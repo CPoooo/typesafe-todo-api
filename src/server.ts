@@ -25,8 +25,18 @@ const app = express();
 app.use(express.json())
 const PORT = process.env.PORT || 3000;
 
+const LoginPayload = z.object({
+    email: z.string().trim(),
+    password: z.string().trim(),
+})
+
 app.post('/auth/login', async (req, res) => {
-    const { email, password } = req.body
+    const payload = LoginPayload.safeParse(req)
+    if (!payload.success) {
+        res.status(400).send({ error: "Invalid Request Body" })
+        return
+    }
+    const { email, password } = payload.data
 
     if (!email) {
         res.status(400).send(JSON.stringify({ error: 'Request to login must have an email in the body' })) // will these checks just be done by zod? 
@@ -66,9 +76,9 @@ app.post('/auth/login', async (req, res) => {
 })
 
 const RegisterPayload = z.object({
-    email: z.email(),
-    name: z.string(),
-    password: z.string(),
+    email: z.email().trim(),
+    name: z.string().trim(),
+    password: z.string().trim(),
 })
 
 app.post('/auth/register', async (req: Request, res) => {
