@@ -1,5 +1,5 @@
 import express, { type Request, Response } from 'express';
-import z from 'zod'
+import * as z from 'zod'
 import bcrypt from "bcrypt"
 import { db } from './db/db';
 import { eq } from 'drizzle-orm'; // when we (me) make the src/queries dir we can remove all this
@@ -20,7 +20,6 @@ import jwt from 'jsonwebtoken'
 
 // GET    /todos?completed=true      filter
 // GET    /todos?sort=createdAt      sort
-
 
 const app = express();
 app.use(express.json())
@@ -66,8 +65,20 @@ app.post('/auth/login', async (req, res) => {
     }
 })
 
+const RegisterPayload = z.object({
+    email: z.email(),
+    name: z.string(),
+    password: z.string(),
+})
+
 app.post('/auth/register', async (req: Request, res) => {
-    const { email, password, name } = req.body
+    const payload = RegisterPayload.safeParse(req.body)
+    if (!payload.success) {
+        res.status(400).send({ error: "Invalid Request Body" })
+        return
+    }
+
+    const { email, password, name } = payload.data
 
     try {
         const result = await db.select().from(usersTable).where(eq(usersTable.email, email))
