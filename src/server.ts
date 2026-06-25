@@ -1,4 +1,4 @@
-import express from 'express';
+import express, {type Request, Response} from 'express';
 import z from 'zod'
 import bcrypt from "bcrypt"
 import { db } from './db/db';
@@ -23,6 +23,7 @@ import jwt from 'jsonwebtoken'
 
 
 const app = express();
+app.use(express.json())
 const PORT = process.env.PORT || 3000;
 
 app.post('/auth/login', async (req, res) => {
@@ -30,7 +31,8 @@ app.post('/auth/login', async (req, res) => {
     res.send('hello from: auth/login')
 })
 
-app.post('/auth/register', async (req, res) => {
+app.post('/auth/register', async (req: Request, res) => {
+    console.log(req.body)
     const { email, password, name } = req.body
 
     try {
