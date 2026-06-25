@@ -57,7 +57,7 @@ app.post('/auth/login', async (req, res) => {
         }
 
         const user_jwt = { userId: user.id }
-        const token = jwt.sign(user, process.env.SECRET_KEY!)
+        const token = jwt.sign(user_jwt, process.env.SECRET_KEY!)
 
         res.status(200).send(JSON.stringify({ token }))
     } catch (error) {
