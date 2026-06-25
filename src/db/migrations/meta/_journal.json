@@ -15,6 +15,13 @@
       "when": 1782326585748,
       "tag": "0001_wakeful_scarlet_witch",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1782405205132,
+      "tag": "0002_glamorous_ultron",
+      "breakpoints": true
     }
   ]
 }

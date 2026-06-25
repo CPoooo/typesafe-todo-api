@@ -1,11 +1,10 @@
 import { Router } from "express";
-import { loginHandler } from "../handlers/authHandlers";
-import { registerHandler } from "../handlers/authHandlers";
+import { login, register, signout } from "../handlers/authHandlers";
 
 const router = Router();
 
-router.post("/login", loginHandler);
-router.post("/register", registerHandler);
-router.post("/signout", signoutHandler); // stateless JWT = mostly a client concern (look into this more)
+router.post("/login", login);
+router.post("/register", register);
+router.post("/signout", signout);
 
 export default router;
