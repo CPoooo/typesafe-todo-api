@@ -5,6 +5,7 @@ import { db } from './db/db';
 import { eq } from 'drizzle-orm'; // when we (me) make the src/queries dir we can remove all this
 import { InsertUser, usersTable } from './db/schema';
 import jwt from 'jsonwebtoken'
+import { authenticatedRouteProtector } from './middleware/authenticator';
 
 // SPEC FOR CHALLENGE: TODO APP WITH AUTH
 
@@ -23,6 +24,7 @@ import jwt from 'jsonwebtoken'
 
 const app = express();
 app.use(express.json())
+app.use(authenticatedRouteProtector)
 const PORT = process.env.PORT || 3000;
 
 const LoginPayload = z.object({
