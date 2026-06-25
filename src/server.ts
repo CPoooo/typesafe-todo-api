@@ -1,14 +1,6 @@
-import express from "express";
-import authRoutes from "./routes/authRoutes";
-import todoRoutes from "./routes/todoRoutes";
+import { app } from './app'
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-app.use(express.json());
-
-app.use("/auth", authRoutes);
-app.use("/todos", todoRoutes);
+const PORT = process.env.PORT || 3000
 
 app.listen(PORT, () => {
   console.log(`

@@ -7,12 +7,12 @@ import { eq } from "drizzle-orm";
 import { usersTable } from "../db/schema";
 
 const LoginPayload = z.object({
-  email: z.string().trim(),
+  email: z.email().trim(),
   password: z.string().trim(),
 });
 
 const RegisterPayload = z.object({
-  email: z.string().trim(),
+  email: z.email().trim(),
   name: z.string().trim(),
   password: z.string().trim(),
 });
