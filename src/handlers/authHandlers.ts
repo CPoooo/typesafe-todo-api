@@ -83,7 +83,8 @@ export const register = async (req: Request, res: Response) => {
 };
 
 // JWT is stateless and real invalidation requires a token denylist of some sort (Redis etc.)
-// For now we will get to this when we build the nextjs client or turn some other client. Leptos on frontend and ts on backend? That is illegal btw 
+// just clear cookie from storage in front end for now 
+// with React/Nextjs client for now, until we build a Tauri ui
 export const signout = (_req: Request, res: Response) => {
   res.status(200).json({ message: "Signed out successfully" });
 };
