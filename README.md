@@ -1,4 +1,4 @@
-Competely type safe todo api with authentication with jwt
+# Competely type safe todo api with authentication with jwt
 
 .env.example (give users an example .env with DATABASE_URL=, SECRET_KEY=, PORT=) to give them an idea of what to add to their .env
 
@@ -7,4 +7,4 @@ git clone https://github.com/CPoooo/typesafe-todo-api
 npm i 
 npm run dev
 
-Drizzle, Neon, Typescript, Zod, Express, Node, JWT, Bcrypt
+Drizzle, Neon, Typescript, Zod, Express, Node, JWT, Bcrypt, Vitest
