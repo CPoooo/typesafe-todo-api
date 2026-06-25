@@ -34,21 +34,29 @@ npm i
 
 ### Environment Variables
 
-Copy `.env.example` to `.env` and fill in your values:
+Copy `.env.example` to `.env` generate a secret key and fill in your values:
 
 ```bash
 cp .env.example .env
 ```
 
+For generating the secret key:
+
+```bash
+openssl rand -hex 64
+```
+
+Paste the generated value into `SECRET_KEY`.
+
 | Variable       | Description                                    |
 | -------------- | ---------------------------------------------- |
 | `DATABASE_URL` | Your Neon Postgres connection string           |
-| `SECRET_KEY`   | Secret used to sign and verify JWT tokens      |
 | `PORT`         | Port to run the server on (defaults to `3000`) |
+| `SECRET_KEY`   | Secret used to sign and verify JWT tokens      |
 
 ### Database Setup
 
-Push the schema to your Neon database:
+Push the schema to your DB:
 
 ```bash
 npm run db:push
@@ -100,6 +108,7 @@ All `/todos` routes require an `Authorization: Bearer <token>` header.
 ---
 
 ## Examples
+I can upload the postman collection as well if someone REALLY wants it 
 
 ### Register
 
