@@ -12,11 +12,13 @@ app.listen(PORT, () => {
     ██║   ╚██████╔╝██████╔╝╚██████╔╝    ██║  ██║██║     ██║
     ╚═╝    ╚═════╝ ╚═════╝  ╚═════╝     ╚═╝  ╚═╝╚═╝     ╚═╝
 \x1b[0m
-\x1b[33m  ⚡ Server blazingly fast (wow!) listening on port ${PORT}\x1b[0m
-\x1b[90m  ────────────────────────────────────────────────────────\x1b[0m
+\x1b[33m  ⚡ Server blazingly fast (wow!) listening on port... ${PORT}\x1b[0m
+\x1b[90m  ─────────────────────────────────────────────────────────────────\x1b[0m
 \x1b[32m  ✓ Database connected
   ✓ Routes mounted
   ✓ JWT auth ready\x1b[0m
-\x1b[90m  ────────────────────────────────────────────────────────\x1b[0m
+\x1b[90m  ──────────────────────────────────────────────────────────────────\x1b[0m
+\x1b[35m  Oh come on who doesnt like ascii art and a colored TUI i know i do\x1b[0m
+\x1b[90m  ──────────────────────────────────────────────────────────────────\x1b[0m
   `);
 });
