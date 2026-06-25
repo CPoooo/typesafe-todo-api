@@ -105,7 +105,7 @@ export const updateTodo = async (req: Request, res: Response) => {
 
   const payload = UpdateTodoPayload.safeParse(req.body);
   if (!payload.success) {
-    res.status(400).json({ error: payload.error.errors[0].message });
+    res.status(400).json({ error: payload.error.message });
     return;
   }
 
