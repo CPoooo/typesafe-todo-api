@@ -4,7 +4,7 @@
 
 A fully type-safe REST API for managing todos with JWT authentication. Built with Express, Drizzle ORM, and Zod.
 Have you ever felt THIS type safe before? 
-...and yes this readme is over the top for a todo rest API but lets face it I have to code something
+...and yes this readme is over the top for a todo rest API but lets face it I have to code something and you know those colored buttons above look cool
 
 ## Stack
 
