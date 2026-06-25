@@ -121,11 +121,12 @@ app.listen(PORT, () => {
     ╚═╝    ╚═════╝ ╚═════╝  ╚═════╝     ╚═╝  ╚═╝╚═╝     ╚═╝
 \x1b[0m
 \x1b[33m  ⚡ Server blazing on port ${PORT}\x1b[0m
-\x1b[90m  ────────────────────────────────\x1b[0m
-\x1b[32m  ✓ Database connected
-  ✓ Routes mounted
-  ✓ JWT auth ready\x1b[0m
-\x1b[90m  ────────────────────────────────\x1b[0m
+\x1b[90m  ────────────────────────────────────────────────────\x1b[0m
+\x1b[32m  ✓ Database connected (I think)
+  ✓ Routes mounted (well yea)
+  ✓ JWT auth ready (PRESENT THEM!! ...your secret key I mean)\x1b[0m
+  \x1b[90m  ────────────────────────────────────────────────────\x1b[0m
+Impressed? I mean there IS color in the terminal right now\x1b[0m
     `)
 })
 
