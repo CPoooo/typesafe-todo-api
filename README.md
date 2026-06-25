@@ -22,7 +22,7 @@ Have you ever felt THIS type safe before?
 ### Prerequisites
 
 - Node.js ≥ 18
-- A [Neon](https://neon.tech) account with a Postgres database ready
+- A [Neon](https://neon.tech) account with a Postgres database ready (or if you know what you are doing Docker and Postgres or any serverless db provider of your choice)
 
 ### Installation
 
