@@ -1,4 +1,4 @@
-import express, {type Request, Response} from 'express';
+import express, { type Request, Response } from 'express';
 import z from 'zod'
 import bcrypt from "bcrypt"
 import { db } from './db/db';
@@ -27,19 +27,55 @@ app.use(express.json())
 const PORT = process.env.PORT || 3000;
 
 app.post('/auth/login', async (req, res) => {
-    console.log("logging in user")
-    res.send('hello from: auth/login')
+    const { email, password } = req.body
+
+    if (!email) {
+        res.status(400).send(JSON.stringify({ error: 'Request to login must have an email in the body' })) // will these checks just be done by zod? 
+        return
+    }
+
+    if (!password) {
+        res.status(400).send(JSON.stringify({ error: 'Request to login must have a password in the body' }))
+        return
+    }
+
+
+    try {
+        const result = await db.select().from(usersTable).where(eq(usersTable.email, email))
+
+        if (result.length <= 0) {
+            res.status(400).send({ error: "Invalid Credentials" })
+            return
+        }
+        const user = result[0]
+
+        const isPasswordCorrect = await bcrypt.compare(password, user.password)
+
+        if (!isPasswordCorrect) {
+            res.status(400).send({ error: "Invalid Credentials" })
+            return
+        }
+
+        const user_jwt = { userId: user.id }
+        const token = jwt.sign(user, process.env.SECRET_KEY!)
+
+        res.status(200).send(JSON.stringify({ token }))
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ error: "Internal Server Error" })
+    }
 })
 
 app.post('/auth/register', async (req: Request, res) => {
-    console.log(req.body)
     const { email, password, name } = req.body
 
     try {
-        const result = await db.selectDistinct().from(usersTable).where(eq(usersTable.email, email))
+        const result = await db.select().from(usersTable).where(eq(usersTable.email, email))
+        console.log(result)
 
         if (result.length > 0) {
-            res.status(400).send(JSON.stringify({ error: 'email already exists so go brute force it and take their lunch money' }))
+            res.status(400).send(JSON.stringify({ error: 'email already exists so go brute force it and take their lunch money' })) // normally do "if this email exists you will receive a confirmation code"
+            return
         }
 
         const password_hash = await bcrypt.hash(password, 10)
@@ -48,11 +84,10 @@ app.post('/auth/register', async (req: Request, res) => {
 
         const token = jwt.sign(user, process.env.SECRET_KEY!) // find a good way to error earlier in this file with this doesnt exist
 
-        res.status(201).send(JSON.stringify(token))
+        res.status(201).send(JSON.stringify({ token }))
     } catch (error) {
         console.log("Something went wrong querying the db for user by email")
-        // should make a discriminated union for all http errors and some custom
-        res.status(500).send(JSON.stringify({ error: "Internal Server Error" }))
+        res.status(500).send(JSON.stringify({ error: "Internal Server Error" })) // should make a discriminated union for all http errors and some custom
     }
 })
 
